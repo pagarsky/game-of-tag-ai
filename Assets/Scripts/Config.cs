@@ -5,15 +5,26 @@ using UnityEngine;
 
 public class Config
 {
-    public Dictionary<string, Color> Colors = new Dictionary<string, Color>()
-    {
-        {"red", Color.red},
-        {"blue", Color.blue}
-    };
+    //public static Dictionary<string, Material> Colors = new Dictionary<string, Material>()
+    //{
+    //    {"Chasers", Resources.Load<Material>("Materials/ChasersMaterial")},
+    //    {"Runners", Resources.Load<Material>("Materials/RunnersMaterial")}
+    //};
 
     public enum Teams
     {
-        RED,
-        BLUE
+        CHASERS,
+        RUNNERS
     }
+
+    public enum Layers
+    {
+        DEFAULT = 0,
+        IGNORE_RAYCAST = 2,
+    }
+
+    public static int agentRaysAmount = 15;
+    public static float rayMaxDistance = 4e10f;
+    public static Color rayColor = Color.yellow;
+
 }

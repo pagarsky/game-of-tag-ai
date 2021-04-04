@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,6 +9,11 @@ public class GameManager : MonoBehaviour
 
     public GameObject agentPrefab;
 
+    public int chasers;
+    public int runners;
+
+    public Material[] materials;
+
     void Awake()
     {
         
@@ -16,6 +22,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         GameObject test = GameObject.Instantiate(agentPrefab);
+        AgentController agent = test.GetComponent<AgentController>();
     }
 
     void Update()
