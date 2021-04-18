@@ -5,24 +5,31 @@ using UnityEngine;
 
 public class Scenario : MonoBehaviour
 {
+    private List<AgentController> _chasers = new List<AgentController>();
+    private List<AgentController> _runners = new List<AgentController>();
 
     public int ChasersAmount { get; private set; }
     public int RunnersAmount { get; private set; }
-
-    private List<AgentController> _chasers = new List<AgentController>();
-    private List<AgentController> _runners = new List<AgentController>();
-    private GameObject _agentPrefab;
-
-    void Awake()
-    {
-        
+    public Vector3 globalPos {
+        get
+        {
+            return this._stage.transform.position;
+        }
     }
 
-    public void Setup(GameObject agentPrefab, int chasers, int runners)
+    public Material[] materials = new Material[2];
+    public GameObject agentPrefab;
+    public GameObject stagePrefab;
+
+    private GameObject _stage;
+
+    public void Setup(int chasers, int runners, Vector3 globalPosition)
     {
-        _agentPrefab = agentPrefab;
         ChasersAmount = chasers;
         RunnersAmount = runners;
+
+        this._stage = GameObject.Instantiate(stagePrefab, this.gameObject.transform);
+        this._stage.transform.position = globalPosition;
     }
 
     public void Run()
@@ -34,28 +41,27 @@ public class Scenario : MonoBehaviour
     {
         for (int i = 0; i < RunnersAmount; i++)
         {
-            GameObject runner = GameObject.Instantiate(_agentPrefab);
+            Vector3 position = Utils.RandomVector3(-Config.spawnSpread, Config.spawnSpread, 0, 5);
+            GameObject runner = GameObject.Instantiate(agentPrefab, this.gameObject.transform);
+
+            runner.transform.position = globalPos + position;
+
             AgentController controller = runner.GetComponent<AgentController>();
+            controller.Initialize(materials[0]);
 
             _runners.Add(controller);
         }
         for (int i = 0; i < ChasersAmount; i++)
         {
-            GameObject chaser = GameObject.Instantiate(_agentPrefab);
+            Vector3 position = Utils.RandomVector3(-Config.spawnSpread, Config.spawnSpread, 0, 5);
+            GameObject chaser = GameObject.Instantiate(agentPrefab, this.gameObject.transform);
+
+            chaser.transform.position = globalPos + position;
+
             AgentController controller = chaser.GetComponent<AgentController>();
+            controller.Initialize(materials[1]);
 
             _chasers.Add(controller);
         }
     }
-
-    void Start()
-    {
-        
-    }
-
-    void FixedUpdate()
-    {
-        
-    }
-
 }

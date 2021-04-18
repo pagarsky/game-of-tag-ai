@@ -24,10 +24,8 @@ public class AgentController : MonoBehaviour
     {
         _material = mat;
         GetComponent<Renderer>().material = _material;
-    }
 
-    void Start()
-    {
+        // TODO: Initialize weights
     }
 
     void FixedUpdate()
