@@ -2,8 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public static class Utils
 {
+
+    public delegate List<AgentController> ListAgentDelegate();
+
     public static Vector3 RandomVector3(float min, float max)
     {
         return new Vector3(
