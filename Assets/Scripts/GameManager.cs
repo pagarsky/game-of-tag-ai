@@ -7,7 +7,9 @@ public class GameManager : MonoBehaviour
 {
     public GameObject scenarioObject;
     public List<Scenario> scenarios;
+
     public int scenariosNumber;
+    public int agentsPerTeam;
     // summary: Main Class for handling game process
     void Awake()
     {
@@ -22,7 +24,7 @@ public class GameManager : MonoBehaviour
             obj.name = "Scenario " + i;
             obj.transform.position = pos;
 
-            scenario.Setup(3, 3, pos);
+            scenario.Setup(agentsPerTeam, agentsPerTeam, pos);
             scenarios.Add(scenario);
             pos.x += Config.stageSpawnStep;
         }

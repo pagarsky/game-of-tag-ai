@@ -17,10 +17,9 @@ public class Config
         IGNORE_RAYCAST = 2,
     }
 
-    public static int agentRaysAmount = 72;
+    public static int agentRaysAmount = 8;
     public static float rayMaxDistance = 3000f;
     public static Color rayColor = Color.yellow;
     public static float spawnSpread = 45f;
     public static float stageSpawnStep = 100f;
-
 }

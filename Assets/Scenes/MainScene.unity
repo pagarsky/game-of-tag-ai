@@ -342,4 +342,5 @@ MonoBehaviour:
   scenarioObject: {fileID: 8474324466783575394, guid: 48d66f6118ff63c4fa7fd9e136fa94cc,
     type: 3}
   scenarios: []
-  scenariosNumber: 8
+  scenariosNumber: 1
+  agentsPerTeam: 3

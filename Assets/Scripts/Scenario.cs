@@ -47,7 +47,7 @@ public class Scenario : MonoBehaviour
             runner.transform.position = globalPos + position;
 
             AgentController controller = runner.GetComponent<AgentController>();
-            controller.Initialize(materials[0]);
+            controller.Initialize(materials[0], GetChasers);
 
             _runners.Add(controller);
         }
@@ -59,9 +59,19 @@ public class Scenario : MonoBehaviour
             chaser.transform.position = globalPos + position;
 
             AgentController controller = chaser.GetComponent<AgentController>();
-            controller.Initialize(materials[1]);
+            controller.Initialize(materials[1], GetRunners);
 
             _chasers.Add(controller);
         }
+    }
+
+    public List<AgentController> GetRunners()
+    {
+        return _runners;
+    }
+
+    public List<AgentController> GetChasers()
+    {
+        return _chasers;
     }
 }
