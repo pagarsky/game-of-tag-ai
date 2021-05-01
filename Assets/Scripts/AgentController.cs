@@ -24,6 +24,8 @@ public class AgentController : Agent
         _collider = GetComponent<CapsuleCollider>();
         _material = GetComponent<Material>();
         _rb = GetComponent<Rigidbody>();
+        
+        SetBehaviourParameters();
 
         Debug.Log("Agent Spawned");
     }
@@ -31,6 +33,7 @@ public class AgentController : Agent
     public override void OnEpisodeBegin()
     {
         transform.localPosition += Utils.RandomVector3(0, 5f);
+        Debug.Log("On Episode Begin " + this.gameObject.name);
     }
 
     public override void CollectObservations(VectorSensor sensor)
@@ -38,27 +41,74 @@ public class AgentController : Agent
         var directions = _GenerateCastDirections();
         var hits = _CastObstacleRays(directions);
         var enemyAngles = _CastEnemiesRays(directions);
-        
-        var obstacleDistances = hits.Select(h => h.distance).ToList();
+        var obstacleDistances = hits.Select(h => h.distance).ToArray();
 
+        // Agents team
+        sensor.AddOneHotObservation((int)this.team, (int)Config.Teams.RUNNERS);
 
-
-        // Agent local position
+        // Agents local position
         sensor.AddObservation(transform.localPosition);
 
         // N raycast distances
+        Utils.Normalize(ref obstacleDistances, 0, 1);
         sensor.AddObservation(obstacleDistances);
 
         // enemies angles
-        foreach (var ang in enemyAngles)
-        {
-            sensor.AddObservation(ang);
-        }
+        enemyAngles.ForEach(angles =>
+            {
+                Utils.Normalize(ref angles, -1, 1);
+                sensor.AddObservation(angles);
+            }
+        );
     }
 
     public override void OnActionReceived(ActionBuffers actionBuffers)
     {
+        Vector3 controlSignal = Vector3.zero;
 
+        controlSignal.x = actionBuffers.ContinuousActions[0];
+        controlSignal.z = actionBuffers.ContinuousActions[1];
+
+        // Action
+        _rb.AddForce(controlSignal * Config.forceMultiplier);
+
+        // Rewards
+        bool endEpisode = false;
+        // TODO: Add time since epoch start for proper runner reward calculation
+        float reward = _DecideReward(0f, out endEpisode);
+
+        SetReward(reward);
+        if (endEpisode) EndEpisode();
+    }
+
+    // This is *NOT* override of Agents built-in method "Initialize". Accidental name collision
+    public void Initialize(Material mat, Utils.ListAgentDelegate GetEnemies, Config.Teams team)
+    {
+        this.team = team;
+        _material = mat;
+        _GetEnemies = GetEnemies;
+        
+        gameObject.name = (team == Config.Teams.CHASERS) ? "chaser" : "runner";
+        GetComponent<Renderer>().material = _material;
+    }
+
+    public override void Heuristic(in ActionBuffers actionsOut)
+    {
+        if (!GameObject.Equals(UnityEditor.Selection.activeObject, this.gameObject))
+            return;
+
+        var continuousActionsOut = actionsOut.ContinuousActions;
+
+        continuousActionsOut[0] = Input.GetAxis("Horizontal");
+        continuousActionsOut[1] = Input.GetAxis("Vertical");
+    }
+
+    private void SetBehaviourParameters()
+    {
+        var parameters = GetComponent<Unity.MLAgents.Policies.BehaviorParameters>();
+
+        parameters.BehaviorName = (team == Config.Teams.CHASERS) ? Config.ChasersBehaviourName : Config.RunnersBehaviourName;
+        parameters.TeamId = (int)team;
     }
 
     private float _ClosestEnemyDist(List<AgentController> enemies)
@@ -70,29 +120,6 @@ public class AgentController : Agent
             min = (distance < min) ? distance : min;
         }
         return min;
-    }
-
-    public void Initialize(Material mat, Utils.ListAgentDelegate GetEnemies, Config.Teams team)
-    {
-        this.team = team;
-        _material = mat;
-        _GetEnemies = GetEnemies;
-        
-        gameObject.name = (team == Config.Teams.CHASERS) ? "chaser" : "runner";
-        GetComponent<Renderer>().material = _material;
-    }
-
-    void FixedUpdate()
-    {
-        var directions = _GenerateCastDirections();
-        var hits = _CastObstacleRays(directions);
-        var angles = _CastEnemiesRays(directions);
-
-        DrawRays(hits);
-        foreach (var a in angles)
-        {
-            Debug.Log(String.Join(" ", a));
-        }
     }
 
     private List<Vector3> _GenerateCastDirections()
@@ -180,6 +207,32 @@ public class AgentController : Agent
             angles = new Tuple<float, float>(Math.Min(lhsAngle, rhsAngle), Math.Max(lhsAngle, rhsAngle));
         }
         return angles;
+    }
+
+    private float _DecideReward(float elapsed, out bool endEpisode)
+    {
+        float dist = _ClosestEnemyDist(_GetEnemies.Invoke());
+
+        if (team == Config.Teams.CHASERS)
+        {
+            if (dist < 2 * _collider.radius)
+            {
+                endEpisode = true;
+                return 1.0f;
+            }
+            endEpisode = false;
+            return Utils.Sigmoid(-dist, Config.sigmoidK);
+        }
+        else
+        {
+            if (dist < 2 * _collider.radius)
+            {
+                endEpisode = true;
+                return -1.0f;
+            }
+            endEpisode = false;
+            return Utils.Sigmoid(elapsed  / dist, Config.sigmoidK);
+        }
     }
 
     private float _MaxByAbs(float item1, float item2)

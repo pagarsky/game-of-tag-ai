@@ -5,8 +5,11 @@ using UnityEngine;
 
 public class Scenario : MonoBehaviour
 {
-    private List<AgentController> _chasers = new List<AgentController>();
-    private List<AgentController> _runners = new List<AgentController>();
+    private List<AgentController> _chasersList = new List<AgentController>();
+    private List<AgentController> _runnersList = new List<AgentController>();
+
+    Unity.MLAgents.SimpleMultiAgentGroup _chasers = new Unity.MLAgents.SimpleMultiAgentGroup();
+    Unity.MLAgents.SimpleMultiAgentGroup _runners = new Unity.MLAgents.SimpleMultiAgentGroup();
 
     public int ChasersAmount { get; private set; }
     public int RunnersAmount { get; private set; }
@@ -49,7 +52,8 @@ public class Scenario : MonoBehaviour
             AgentController controller = runner.GetComponent<AgentController>();
             controller.Initialize(materials[0], GetChasers, Config.Teams.RUNNERS);
 
-            _runners.Add(controller);
+            _runnersList.Add(controller);
+            _runners.RegisterAgent(controller);
         }
         for (int i = 0; i < ChasersAmount; i++)
         {
@@ -61,17 +65,18 @@ public class Scenario : MonoBehaviour
             AgentController controller = chaser.GetComponent<AgentController>();
             controller.Initialize(materials[1], GetRunners, Config.Teams.CHASERS);
 
-            _chasers.Add(controller);
+            _chasersList.Add(controller);
+            _chasers.RegisterAgent(controller);
         }
     }
 
     public List<AgentController> GetRunners()
     {
-        return _runners;
+        return _runnersList;
     }
 
     public List<AgentController> GetChasers()
     {
-        return _chasers;
+        return _chasersList;
     }
 }
