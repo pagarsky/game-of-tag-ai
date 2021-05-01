@@ -22,4 +22,6 @@ public class Config
     public static Color rayColor = Color.yellow;
     public static float spawnSpread = 45f;
     public static float stageSpawnStep = 100f;
+
+    public static bool FULL_OBSERVABILITY = false;
 }

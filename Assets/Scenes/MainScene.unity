@@ -343,4 +343,4 @@ MonoBehaviour:
     type: 3}
   scenarios: []
   scenariosNumber: 1
-  agentsPerTeam: 3
+  agentsPerTeam: 1
