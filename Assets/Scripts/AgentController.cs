@@ -16,24 +16,29 @@ public class AgentController : Agent
     private Rigidbody _rb;
     private Material _material;
     private Utils.ListAgentDelegate _GetEnemies;
+
+    private float timeElapsed = 0f;
     
     public Config.Teams team { get; private set; }
+    public float radius
+    {
+        get
+        {
+            return _collider.radius;
+        }
+    }
 
     void Awake()
     {
         _collider = GetComponent<CapsuleCollider>();
         _material = GetComponent<Material>();
         _rb = GetComponent<Rigidbody>();
-        
-        SetBehaviourParameters();
-
-        Debug.Log("Agent Spawned");
     }
 
     public override void OnEpisodeBegin()
     {
-        transform.localPosition += Utils.RandomVector3(0, 5f);
-        Debug.Log("On Episode Begin " + this.gameObject.name);
+        transform.localPosition = Utils.RandomVector3(-Config.spawnSpread, Config.spawnSpread, Config.spawnHeight);
+        timeElapsed = 0f;
     }
 
     public override void CollectObservations(VectorSensor sensor)
@@ -43,21 +48,22 @@ public class AgentController : Agent
         var enemyAngles = _CastEnemiesRays(directions);
         var obstacleDistances = hits.Select(h => h.distance).ToArray();
 
-        // Agents team
-        sensor.AddOneHotObservation((int)this.team, (int)Config.Teams.RUNNERS);
+        // Closest enemy distance
+        sensor.AddObservation(_ClosestEnemyDist(_GetEnemies?.Invoke()));
 
         // Agents local position
-        sensor.AddObservation(transform.localPosition);
+        //sensor.AddObservation(transform.localPosition);
 
         // N raycast distances
-        Utils.Normalize(ref obstacleDistances, 0, 1);
-        sensor.AddObservation(obstacleDistances);
+        //Utils.Normalize(ref obstacleDistances, 0, 1);
+        //sensor.AddObservation(obstacleDistances);
 
         // enemies angles
         enemyAngles.ForEach(angles =>
             {
-                Utils.Normalize(ref angles, -1, 1);
+                //Utils.Normalize(ref angles, -1, 1);
                 sensor.AddObservation(angles);
+                String.Join(" ", angles);
             }
         );
     }
@@ -75,9 +81,8 @@ public class AgentController : Agent
         // Rewards
         bool endEpisode = false;
         // TODO: Add time since epoch start for proper runner reward calculation
-        float reward = _DecideReward(0f, out endEpisode);
+        _DecideReward(timeElapsed, out endEpisode);
 
-        SetReward(reward);
         if (endEpisode) EndEpisode();
     }
 
@@ -89,6 +94,7 @@ public class AgentController : Agent
         _GetEnemies = GetEnemies;
         
         gameObject.name = (team == Config.Teams.CHASERS) ? "chaser" : "runner";
+        SetBehaviourParameters();
         GetComponent<Renderer>().material = _material;
     }
 
@@ -109,6 +115,11 @@ public class AgentController : Agent
 
         parameters.BehaviorName = (team == Config.Teams.CHASERS) ? Config.ChasersBehaviourName : Config.RunnersBehaviourName;
         parameters.TeamId = (int)team;
+    }
+
+    private void FixedUpdate()
+    {
+        timeElapsed += Time.deltaTime;
     }
 
     private float _ClosestEnemyDist(List<AgentController> enemies)
@@ -209,8 +220,14 @@ public class AgentController : Agent
         return angles;
     }
 
-    private float _DecideReward(float elapsed, out bool endEpisode)
+    private void _DecideReward(float elapsed, out bool endEpisode)
     {
+
+        if (transform.position.y < -1f)
+        {
+            endEpisode = true;
+            SetReward(0f);
+        }
         float dist = _ClosestEnemyDist(_GetEnemies.Invoke());
 
         if (team == Config.Teams.CHASERS)
@@ -218,20 +235,20 @@ public class AgentController : Agent
             if (dist < 2 * _collider.radius)
             {
                 endEpisode = true;
-                return 1.0f;
+                SetReward(1f);
             }
             endEpisode = false;
-            return Utils.Sigmoid(-dist, Config.sigmoidK);
+            //SetReward(Utils.Sigmoid(1 / dist, Config.sigmoidK));
         }
         else
         {
             if (dist < 2 * _collider.radius)
             {
                 endEpisode = true;
-                return -1.0f;
+                SetReward(-1f);
             }
             endEpisode = false;
-            return Utils.Sigmoid(elapsed  / dist, Config.sigmoidK);
+            //SetReward(Utils.Sigmoid(elapsed * dist, Config.sigmoidK));
         }
     }
 

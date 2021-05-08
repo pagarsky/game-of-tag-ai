@@ -6,9 +6,11 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public GameObject scenarioObject;
+    public GameObject stagePrefab;
     public List<Scenario> scenarios;
 
     public int scenariosNumber;
+    public int scenariosRows;
     public int agentsPerTeam;
     // summary: Main Class for handling game process
     void Awake()
@@ -16,17 +18,22 @@ public class GameManager : MonoBehaviour
         scenarios = new List<Scenario>();
         Vector3 pos = Vector3.zero;
 
-        for (int i = 0; i < scenariosNumber; i++)
+        for (int j = 0; j < scenariosRows; j++)
         {
-            GameObject obj = GameObject.Instantiate(scenarioObject);
-            Scenario scenario = obj.GetComponent<Scenario>();
+            for (int i = 0; i < scenariosNumber; i++)
+            {
+                GameObject obj = GameObject.Instantiate(scenarioObject);
+                Scenario scenario = obj.GetComponent<Scenario>();
 
-            obj.name = "Scenario " + i;
-            obj.transform.position = pos;
+                obj.name = "Scenario " +j + i;
+                obj.transform.position = pos;
 
-            scenario.Setup(agentsPerTeam, agentsPerTeam, pos);
-            scenarios.Add(scenario);
-            pos.x += Config.stageSpawnStep;
+                scenario.Setup(agentsPerTeam, agentsPerTeam, pos, stagePrefab);
+                scenarios.Add(scenario);
+                pos.x += Config.stageSpawnStep;
+            }
+            pos.x = 0;
+            pos.z += Config.stageSpawnStep;
         }
     }
 

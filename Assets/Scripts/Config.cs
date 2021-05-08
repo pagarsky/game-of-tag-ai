@@ -20,10 +20,11 @@ public class Config
     public static string ChasersBehaviourName = "ChasersBehaviour";
     public static string RunnersBehaviourName = "RunnersBehaviour";
 
-    public static float rayMaxDistance = 3000f;
-    public static float spawnSpread = 45f;
-    public static float stageSpawnStep = 100f;
-    public static float forceMultiplier = 10f;
+    public static float rayMaxDistance = 300f;
+    public static float spawnSpread = 2f;
+    public static float spawnHeight = 1f;
+    public static float stageSpawnStep = 50f;
+    public static float forceMultiplier = 20f;
     public static float sigmoidK = 5f;
 
     public static Color rayColor = Color.yellow;

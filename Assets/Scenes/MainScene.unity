@@ -341,6 +341,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scenarioObject: {fileID: 8474324466783575394, guid: 48d66f6118ff63c4fa7fd9e136fa94cc,
     type: 3}
+  stagePrefab: {fileID: 5808224203884932672, guid: ba4aac482f3a7834ba671cbaf5deaa51,
+    type: 3}
   scenarios: []
-  scenariosNumber: 1
+  scenariosNumber: 3
+  scenariosRows: 4
   agentsPerTeam: 1

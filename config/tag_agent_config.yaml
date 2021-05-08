@@ -1,0 +1,13 @@
+behaviors:
+  ChasersBehaviour:
+    max_steps: 500000
+    summary_freq: 500
+    threaded: true
+    network_settings:
+      hidden_units: 16
+  RunnersBehaviour:
+    max_steps: 500000
+    summary_freq: 500
+    threaded: true
+    network_settings:
+      hidden_units: 16

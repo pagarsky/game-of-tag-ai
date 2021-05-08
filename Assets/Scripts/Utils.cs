@@ -17,23 +17,26 @@ public static class Utils
         );
     }
 
-    public static Vector3 RandomVector3(float Min, float Max, float yMin = 0, float yMax = 5)
+    public static Vector3 RandomVector3(float Min, float Max, float height)
     {
         return new Vector3(
             Random.Range(Min, Max),
-            Random.Range(yMin, yMax),
+            height,
             Random.Range(Min, Max)
         );
     }
+
 
     public static void Normalize(ref float[] x, float a, float b)
     {
         float max = Enumerable.Max(x);
         float min = Enumerable.Min(x);
 
+        float diff = (max - min) != 0f ? max - min : 1;
+
         for (int i = 0; i < x.Length; i++)
         {
-            x[i] = (b - a) * (x[i] - min) / (max - min) + a;
+            x[i] = (b - a) * (x[i] - min) / diff + a;
         }
     }
 
