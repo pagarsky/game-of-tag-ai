@@ -22,7 +22,7 @@ public class Scenario : MonoBehaviour
 
     public Material[] materials = new Material[2];
     public GameObject agentPrefab;
-    public GameObject stagePrefab;
+    //public GameObject stagePrefab;
 
     private GameObject _stage;
 

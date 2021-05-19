@@ -344,6 +344,10 @@ MonoBehaviour:
   stagePrefab: {fileID: 5808224203884932672, guid: ba4aac482f3a7834ba671cbaf5deaa51,
     type: 3}
   scenarios: []
-  scenariosNumber: 3
-  scenariosRows: 4
+  runnerModel: {fileID: 5022602860645237092, guid: 5509e39e9bc038a4b86ac9335bfcfcf8,
+    type: 3}
+  chaserModel: {fileID: 5022602860645237092, guid: f60891618ffa0c741b3cf3ad696f01d0,
+    type: 3}
+  scenariosNumber: 2
+  scenariosRows: 3
   agentsPerTeam: 1

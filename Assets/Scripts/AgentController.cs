@@ -8,7 +8,7 @@ using UnityEngine.EventSystems;
 using Unity.MLAgents;
 using Unity.MLAgents.Sensors;
 using Unity.MLAgents.Actuators;
-
+using System.ComponentModel.Design;
 
 public class AgentController : Agent
 {
@@ -37,6 +37,7 @@ public class AgentController : Agent
 
     public override void OnEpisodeBegin()
     {
+        Debug.Log("Begin Episode " + gameObject.name);
         transform.localPosition = Utils.RandomVector3(-Config.spawnSpread, Config.spawnSpread, Config.spawnHeight);
         timeElapsed = 0f;
     }
@@ -49,21 +50,18 @@ public class AgentController : Agent
         var obstacleDistances = hits.Select(h => h.distance).ToArray();
 
         // Closest enemy distance
-        sensor.AddObservation(_ClosestEnemyDist(_GetEnemies?.Invoke()));
-
-        // Agents local position
-        //sensor.AddObservation(transform.localPosition);
+        //var closest = _ClosestEnemyDist(_GetEnemies?.Invoke());
+        //sensor.AddObservation(closest);
 
         // N raycast distances
-        //Utils.Normalize(ref obstacleDistances, 0, 1);
-        //sensor.AddObservation(obstacleDistances);
+        Utils.Normalize(ref obstacleDistances, 0, 1);
+        sensor.AddObservation(obstacleDistances);
 
         // enemies angles
         enemyAngles.ForEach(angles =>
             {
                 //Utils.Normalize(ref angles, -1, 1);
                 sensor.AddObservation(angles);
-                String.Join(" ", angles);
             }
         );
     }
@@ -71,19 +69,21 @@ public class AgentController : Agent
     public override void OnActionReceived(ActionBuffers actionBuffers)
     {
         Vector3 controlSignal = Vector3.zero;
-
         controlSignal.x = actionBuffers.ContinuousActions[0];
         controlSignal.z = actionBuffers.ContinuousActions[1];
 
         // Action
         _rb.AddForce(controlSignal * Config.forceMultiplier);
 
-        // Rewards
-        bool endEpisode = false;
-        // TODO: Add time since epoch start for proper runner reward calculation
-        _DecideReward(timeElapsed, out endEpisode);
+    }
 
-        if (endEpisode) EndEpisode();
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.collider is CapsuleCollider)
+        {
+            _DecideReward(timeElapsed);
+            EndEpisode();
+        }
     }
 
     // This is *NOT* override of Agents built-in method "Initialize". Accidental name collision
@@ -220,35 +220,17 @@ public class AgentController : Agent
         return angles;
     }
 
-    private void _DecideReward(float elapsed, out bool endEpisode)
+    private void _DecideReward(float elapsed)
     {
-
-        if (transform.position.y < -1f)
-        {
-            endEpisode = true;
-            SetReward(0f);
-        }
         float dist = _ClosestEnemyDist(_GetEnemies.Invoke());
 
         if (team == Config.Teams.CHASERS)
         {
-            if (dist < 2 * _collider.radius)
-            {
-                endEpisode = true;
-                SetReward(1f);
-            }
-            endEpisode = false;
-            //SetReward(Utils.Sigmoid(1 / dist, Config.sigmoidK));
+            SetReward(Utils.Sigmoid(1f - elapsed, Config.sigmoidK));
         }
         else
         {
-            if (dist < 2 * _collider.radius)
-            {
-                endEpisode = true;
-                SetReward(-1f);
-            }
-            endEpisode = false;
-            //SetReward(Utils.Sigmoid(elapsed * dist, Config.sigmoidK));
+            SetReward(Utils.Sigmoid(-1f + elapsed, Config.sigmoidK));
         }
     }
 
