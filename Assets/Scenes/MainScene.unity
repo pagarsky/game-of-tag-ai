@@ -341,7 +341,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scenarioObject: {fileID: 8474324466783575394, guid: 48d66f6118ff63c4fa7fd9e136fa94cc,
     type: 3}
-  stagePrefab: {fileID: 5808224203884932672, guid: ba4aac482f3a7834ba671cbaf5deaa51,
+  stagePrefab: {fileID: 3414445187594712191, guid: ef01f9afb235f074583519ff876a8271,
     type: 3}
   scenarios: []
   runnerModel: {fileID: 5022602860645237092, guid: 5509e39e9bc038a4b86ac9335bfcfcf8,
@@ -349,5 +349,5 @@ MonoBehaviour:
   chaserModel: {fileID: 5022602860645237092, guid: f60891618ffa0c741b3cf3ad696f01d0,
     type: 3}
   scenariosNumber: 2
-  scenariosRows: 3
+  scenariosRows: 2
   agentsPerTeam: 1

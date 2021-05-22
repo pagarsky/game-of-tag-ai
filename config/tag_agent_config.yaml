@@ -19,3 +19,10 @@ behaviors:
     network_settings:
       num_layers: 3
       hidden_units: 32
+
+engine_settings:
+  time_scale: 40
+  no_graphics: true
+
+torch_settings:
+  device: cuda:0

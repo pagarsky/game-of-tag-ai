@@ -33,6 +33,8 @@ public class AgentController : Agent
         _collider = GetComponent<CapsuleCollider>();
         _material = GetComponent<Material>();
         _rb = GetComponent<Rigidbody>();
+
+        this.MaxStep = Config.agentMaxStep;
     }
 
     public override void OnEpisodeBegin()
@@ -74,7 +76,6 @@ public class AgentController : Agent
 
         // Action
         _rb.AddForce(controlSignal * Config.forceMultiplier);
-
     }
 
     private void OnCollisionEnter(Collision collision)

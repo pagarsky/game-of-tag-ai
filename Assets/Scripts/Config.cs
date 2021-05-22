@@ -21,14 +21,15 @@ public class Config
     public static string RunnersBehaviourName = "RunnersBehaviour";
 
     public static float rayMaxDistance = 300f;
-    public static float spawnSpread = 2f; // 2 for small stage, 20 for basic
+    public static float spawnSpread = 20f; // 2 for small stage, 20 for basic
     public static float spawnHeight = 1f; // 1 for small stage
-    public static float stageSpawnStep = 50f; // 50 for small stage, 100 for basic
+    public static float stageSpawnStep = 100f; // 50 for small stage, 100 for basic
     public static float forceMultiplier = 40f;
     public static float sigmoidK = 5f;
 
     public static Color rayColor = Color.yellow;
     public static int agentRaysAmount = 8;
+    public static int agentMaxStep = 1000;
 
     public static bool FULL_OBSERVABILITY = false;
 }
