@@ -1,0 +1,87 @@
+{
+    "ChasersBehaviour": {
+        "checkpoints": [
+            {
+                "steps": 1212,
+                "file_path": "results\\test_obstacles\\ChasersBehaviour\\ChasersBehaviour-1212.onnx",
+                "reward": 0.0128067604133061,
+                "creation_time": 1621687096.013479
+            },
+            {
+                "steps": 8206,
+                "file_path": "results\\test_obstacles\\ChasersBehaviour\\ChasersBehaviour-8206.onnx",
+                "reward": 0.021110983350464848,
+                "creation_time": 1621687194.3535264
+            },
+            {
+                "steps": 499968,
+                "file_path": "results\\test_obstacles\\ChasersBehaviour\\ChasersBehaviour-499968.onnx",
+                "reward": 0.03583422290899239,
+                "creation_time": 1621689292.6612427
+            },
+            {
+                "steps": 999975,
+                "file_path": "results\\test_obstacles\\ChasersBehaviour\\ChasersBehaviour-999975.onnx",
+                "reward": 0.03786037207384813,
+                "creation_time": 1621691614.7958982
+            },
+            {
+                "steps": 1323281,
+                "file_path": "results\\test_obstacles\\ChasersBehaviour\\ChasersBehaviour-1323281.onnx",
+                "reward": null,
+                "creation_time": 1621693084.9351015
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1323281,
+            "file_path": "results\\test_obstacles\\ChasersBehaviour.onnx",
+            "reward": null,
+            "creation_time": 1621693084.9351015
+        }
+    },
+    "RunnersBehaviour": {
+        "checkpoints": [
+            {
+                "steps": 1212,
+                "file_path": "results\\test_obstacles\\RunnersBehaviour\\RunnersBehaviour-1212.onnx",
+                "reward": 0.034812288624899726,
+                "creation_time": 1621687096.065467
+            },
+            {
+                "steps": 8179,
+                "file_path": "results\\test_obstacles\\RunnersBehaviour\\RunnersBehaviour-8179.onnx",
+                "reward": 0.08998587123445563,
+                "creation_time": 1621687194.4154909
+            },
+            {
+                "steps": 499986,
+                "file_path": "results\\test_obstacles\\RunnersBehaviour\\RunnersBehaviour-499986.onnx",
+                "reward": 0.7178064691735074,
+                "creation_time": 1621689293.0842886
+            },
+            {
+                "steps": 999948,
+                "file_path": "results\\test_obstacles\\RunnersBehaviour\\RunnersBehaviour-999948.onnx",
+                "reward": 0.7511275145075014,
+                "creation_time": 1621691614.7369325
+            },
+            {
+                "steps": 1323020,
+                "file_path": "results\\test_obstacles\\RunnersBehaviour\\RunnersBehaviour-1323020.onnx",
+                "reward": null,
+                "creation_time": 1621693084.8651419
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1323020,
+            "file_path": "results\\test_obstacles\\RunnersBehaviour.onnx",
+            "reward": null,
+            "creation_time": 1621693084.8651419
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.2.0",
+        "mlagents_version": "0.25.1",
+        "torch_version": "1.7.1+cu110"
+    }
+}

@@ -1,0 +1,63 @@
+{
+    "ChasersBehaviour": {
+        "checkpoints": [
+            {
+                "steps": 499970,
+                "file_path": "results\\add_obstacles\\ChasersBehaviour\\ChasersBehaviour-499970.onnx",
+                "reward": 0.03887675651274146,
+                "creation_time": 1621792062.2528243
+            },
+            {
+                "steps": 999992,
+                "file_path": "results\\add_obstacles\\ChasersBehaviour\\ChasersBehaviour-999992.onnx",
+                "reward": 0.04910402539616614,
+                "creation_time": 1621794122.3950787
+            },
+            {
+                "steps": 1001534,
+                "file_path": "results\\add_obstacles\\ChasersBehaviour\\ChasersBehaviour-1001534.onnx",
+                "reward": 0.0750887750873962,
+                "creation_time": 1621794127.7296522
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1001534,
+            "file_path": "results\\add_obstacles\\ChasersBehaviour.onnx",
+            "reward": 0.0750887750873962,
+            "creation_time": 1621794127.7296522
+        }
+    },
+    "RunnersBehaviour": {
+        "checkpoints": [
+            {
+                "steps": 499970,
+                "file_path": "results\\add_obstacles\\RunnersBehaviour\\RunnersBehaviour-499970.onnx",
+                "reward": 0.6667184654871623,
+                "creation_time": 1621792062.3067753
+            },
+            {
+                "steps": 999992,
+                "file_path": "results\\add_obstacles\\RunnersBehaviour\\RunnersBehaviour-999992.onnx",
+                "reward": 0.7334773122616436,
+                "creation_time": 1621794122.4480479
+            },
+            {
+                "steps": 1001534,
+                "file_path": "results\\add_obstacles\\RunnersBehaviour\\RunnersBehaviour-1001534.onnx",
+                "reward": 0.7010118194035629,
+                "creation_time": 1621794127.7856197
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1001534,
+            "file_path": "results\\add_obstacles\\RunnersBehaviour.onnx",
+            "reward": 0.7010118194035629,
+            "creation_time": 1621794127.7856197
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.2.0",
+        "mlagents_version": "0.25.1",
+        "torch_version": "1.7.1+cu110"
+    }
+}
